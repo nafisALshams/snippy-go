@@ -33,9 +33,9 @@ func snippyCreate(w http.ResponseWriter, r *http.Request) {
 func main() {
 	/* creating a new servedxr mux and registering a handler function */
 	mux := http.NewServeMux()
-	mux.HandleFunc("/{$}", home)                    //restricting to only root path
-	mux.HandleFunc("/snippy/view/{id}", snippyView) //dynamic path or wildcard segment {id}
-	mux.HandleFunc("/snippy/create", snippyCreate)
+	mux.HandleFunc("GET /{$}", home)                    //restricting to only root path
+	mux.HandleFunc("GET /snippy/view/{id}", snippyView) //dynamic path segment {id}
+	mux.HandleFunc("GET /snippy/create", snippyCreate)
 
 	//logging server start
 	log.Println("Starting server on :4000")
