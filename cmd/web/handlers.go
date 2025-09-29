@@ -5,27 +5,41 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 )
 
 // Handler for the home page
-func home(w http.ResponseWriter, r *http.Request) {
+func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Server", "Go Web Server")
-	ts, err := template.ParseFiles("./ui/html/pages/home.tmpl.html")
+
+	// Use the current working directory as the base for template paths
+	cwd, err := os.Getwd()
 	if err != nil {
-		log.Print(err.Error())
+		log.Print("Failed to get working directory:", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-	err = ts.Execute(w, nil)
+	files := []string{
+		filepath.Join(cwd, "ui", "html", "base.tmpl.html"),
+		filepath.Join(cwd, "ui", "html", "partials", "nav.tmpl.html"),
+		filepath.Join(cwd, "ui", "html", "pages", "home.tmpl.html"),
+	}
+
+	ts, err := template.ParseFiles(files...)
 	if err != nil {
-		log.Print(err.Error())
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		app.serverError(w, r, err)
+		return
+	}
+	err = ts.ExecuteTemplate(w, "base", nil)
+	if err != nil {
+		app.serverError(w, r, err)
 	}
 }
 
 // Handler to view a snippy by ID
-func snippyView(w http.ResponseWriter, r *http.Request) {
+func (app *application) snippyView(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil || id < 1 {
 		http.NotFound(w, r)
@@ -35,12 +49,12 @@ func snippyView(w http.ResponseWriter, r *http.Request) {
 }
 
 // Handler to create a new snippy
-func snippyCreate(w http.ResponseWriter, r *http.Request) {
+func (app *application) snippyCreate(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Create a new snippy here"))
 }
 
 // Handler to process the creation of a new snippy
-func snippyCreatePost(w http.ResponseWriter, r *http.Request) {
+func (app *application) snippyCreatePost(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte("Saving a snippy successfully"))
 }

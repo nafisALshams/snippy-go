@@ -1,24 +1,38 @@
 {{define "base"}}
 
+
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{template "title" .}} - Snippy</title>
-    </head>
-
-    <body>
-        <header>
-            <h1><a href="/">Snippy</a></h1>
-        </header>
-        <main>
-            {{template "main" .}}
-        </main>
-        <footer>Powered by 
-            <a href="https://github.com/nafisALshams/snippy-go">Snippy</a>
-        </foooter>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{template "title" .}} - Snippy</title>
+    <link rel="stylesheet" href="/static/css/snippy.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%233182ce' stroke-width='2' d='M4 7h16M4 12h16M4 17h16'/%3E%3C/svg%3E">
+</head>
+<body>
+    <div class="rainbow-bar"></div>
+    <header>
+        <h1>
+            <a href="/">
+                <svg class="logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="8" y="8" width="32" height="32" rx="6" fill="#3b82f6"/>
+                    <rect x="14" y="14" width="20" height="20" rx="3" fill="#fff"/>
+                    <rect x="18" y="18" width="12" height="12" rx="2" fill="#3b82f6"/>
+                </svg>
+                Snippy
+            </a>
+        </h1>
+    </header>
+    {{template "nav" .}}
+    <main>
+        {{template "main" .}}
+    </main>
+    <footer>
+        Powered by <a href="https://golang.org/">Go</a>
+    </footer>
+    <script src="/static/js/snippy.js"></script>
+</body>
 </html>
 
 {{end}}
